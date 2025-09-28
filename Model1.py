@@ -260,3 +260,45 @@ axes[1].grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.show()
+
+# %% [code]
+import pickle
+
+# Шаг 6: Сохранение моделей и скалеров
+
+# Папка для сохранения моделей
+import os
+os.makedirs('model', exist_ok=True)
+
+# Сохраняем модели в формате .h5 (внутри Keras)
+model_narx.save('model/narx_lstm_model.h5')
+model_ae.save('model/ae_model.h5')
+
+print("✅ Модели сохранены:")
+print("  - model/narx_lstm_model.h5")
+print("  - model/ae_model.h5")
+
+# Сохраняем скалеры с помощью pickle (они не сохраняются в .h5)
+with open('model/scaler_narx.pkl', 'wb') as f:
+    pickle.dump(scaler_narx, f)
+
+with open('model/scaler_ae.pkl', 'wb') as f:
+    pickle.dump(scaler_ae, f)
+
+print("\n✅ Скалеры сохранены:")
+print("  - model/scaler_narx.pkl")
+print("  - model/scaler_ae.pkl")
+
+# Сохраняем список признаков для будущего использования
+feature_info = {
+    'narx_features': feature_columns,
+    'ae_features': ae_feature_columns,
+    'window_size': WINDOW_SIZE,
+    'target_column': target_column
+}
+
+with open('model/feature_info.pkl', 'wb') as f:
+    pickle.dump(feature_info, f)
+
+print("\n✅ Информация о признаках сохранена:")
+print("  - model/feature_info.pkl")
